@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. B. Deveautour — Academic Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=VT323&family=Cinzel:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,500;1,8..60,300&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════════════════════
+   ROOT & THEMES
+══════════════════════════════════════════════════════════════ */
+:root {
+  --font-classic: 'Source Serif 4', Georgia, serif;
+  --font-rpg-title: 'VT323', monospace;
+  --font-rpg-serif: 'IM Fell English', serif;
+  --font-rpg-display: 'Cinzel', serif;
+
+  /* Classic palette */
+  --c-bg: #f5f2ec;
+  --c-surface: #ffffff;
+  --c-border: #d4c9b0;
+  --c-text: #2a2218;
+  --c-muted: #6b5e4a;
+  --c-accent: #3a5a8c;
+  --c-accent2: #7a3a1a;
+  --c-nav-bg: #2a2218;
+  --c-nav-text: #f5f2ec;
+  --c-nav-hover: #c9a96e;
+
+  /* RPG steampunk palette */
+  --rpg-bg: #0d0a06;
+  --rpg-bg2: #1a1208;
+  --rpg-surface: #1e160a;
+  --rpg-border: #5c3f1a;
+  --rpg-border-glow: #c9850a;
+  --rpg-gold: #d4a843;
+  --rpg-gold-light: #f0c86a;
+  --rpg-dim: #8a6a3a;
+  --rpg-text: #e8d5a8;
+  --rpg-text-dim: #9a7a4a;
+  --rpg-steam: #4a7a8a;
+  --rpg-gear: #7a5530;
+  --rpg-hp: #5a1010;
+  --rpg-mp: #1a2a5a;
+  --rpg-hp-fill: #e04040;
+  --rpg-mp-fill: #4060c0;
+  --rpg-crystal: #7a4ab0;
+
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-classic);
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODE SWITCHER OVERLAY
+══════════════════════════════════════════════════════════════ */
+#mode-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0a0805;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+#mode-overlay .overlay-title {
+  font-family: var(--font-rpg-display);
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  color: #d4a843;
+  letter-spacing: 0.15em;
+  text-align: center;
+  text-shadow: 0 0 30px rgba(212, 168, 67, 0.4);
+}
+
+#mode-overlay .overlay-sub {
+  font-family: var(--font-classic);
+  font-size: 1.4rem;
+  color: #7a6846;
+  text-align: center;
+  margin-top: -2rem;
+  font-style: italic;
+}
+
+.mode-cards {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.mode-card {
+  width: 260px;
+  border: 1px solid #3a2a0a;
+  border-radius: 4px;
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s;
+  background: #140f05;
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mode-card.classic::before {
+  background: radial-gradient(ellipse at top, rgba(58, 90, 140, 0.15), transparent);
+}
+
+.mode-card.rpg::before {
+  background: radial-gradient(ellipse at top, rgba(212, 168, 67, 0.1), transparent);
+}
+
+.mode-card:hover {
+  border-color: #8a6a2a;
+  transform: translateY(-4px);
+}
+.mode-card:hover::before { opacity: 1; }
+
+.mode-card:hover .card-icon { transform: scale(1.1); }
+
+.card-icon {
+  font-size: 3rem;
+  transition: transform 0.3s;
+  line-height: 1;
+}
+
+.card-title {
+  font-family: var(--font-rpg-display);
+  color: #d4a843;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.card-desc {
+  font-family: var(--font-classic);
+  color: #6a5a3a;
+  font-size: 0.8rem;
+  text-align: center;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.lang-choice {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.lang-btn {
+  font-family: var(--font-classic);
+  font-size: 0.8rem;
+  color: #9a7a4a;
+  border: 1px solid #3a2a0a;
+  background: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.lang-btn:hover, .lang-btn.active {
+  color: #d4a843;
+  border-color: #5a3a0a;
+  background: rgba(212, 168, 67, 0.05);
+}
+
+.select-btn {
+  font-family: var(--font-rpg-display);
+  font-size: 0.85rem;
+  color: #0a0805;
+  background: #c9850a;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.select-btn:hover {
+  background: #d4a843;
+  transform: translateY(-1px);
+}
+
+/* corner decorations */
+.mode-card .corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #5c3f1a;
+  border-style: solid;
+}
+.corner.tl { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+.corner.tr { top: 6px; right: 6px; border-width: 1px 1px 0 0; }
+.corner.bl { bottom: 6px; left: 6px; border-width: 0 0 1px 1px; }
+.corner.br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   CLASSIC MODE
+══════════════════════════════════════════════════════════════ */
+#app { display: none; }
+#app.active { display: block; }
+
+/* Classic Navigation */
+.classic-nav {
+  background: var(--c-nav-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  border-bottom: 2px solid var(--c-accent);
+}
+
+.nav-brand {
+  font-family: var(--font-classic);
+  font-size: 1rem;
+  color: var(--c-nav-text);
+  font-style: italic;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+}
+
+.classic-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0;
+}
+
+.classic-nav li a {
+  display: block;
+  padding: 0 1.1rem;
+  height: 56px;
+  line-height: 56px;
+  font-family: var(--font-classic);
+  font-size: 0.82rem;
+  color: var(--c-nav-text);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.classic-nav li a:hover,
+.classic-nav li a.active {
+  color: var(--c-nav-hover);
+  border-bottom-color: var(--c-nav-hover);
+}
+
+.nav-lang {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.nav-lang button {
+  background: none;
+  border: 1px solid #4a3a28;
+  color: #8a7a5a;
+  font-family: var(--font-classic);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-lang button:hover,
+.nav-lang button.active {
+  border-color: var(--c-nav-hover);
+  color: var(--c-nav-hover);
+}
+
+.switch-mode-btn {
+  background: none;
+  border: 1px solid #3a2a18;
+  color: #5a4a2a;
+  font-family: var(--font-classic);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+  margin-left: 1rem;
+}
+.switch-mode-btn:hover {
+  border-color: #c9850a;
+  color: #c9850a;
+}
+
+/* Classic Hero */
+.classic-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.hero-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px solid var(--c-border);
+  background: var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-classic);
+  font-size: 3rem;
+  color: var(--c-muted);
+  /* PLACEHOLDER: replace with your actual photo */
+  /* background-image: url('assets/photo.jpg'); */
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.hero-info h1 {
+  font-family: var(--font-classic);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--c-text);
+  line-height: 1.2;
+  margin-bottom: 0.3rem;
+}
+
+.hero-info .title-line {
+  font-size: 1rem;
+  color: var(--c-accent);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.hero-info .institution {
+  font-size: 0.9rem;
+  color: var(--c-muted);
+  margin-bottom: 1rem;
+}
+
+.hero-info .tagline {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--c-muted);
+  font-style: italic;
+  border-left: 3px solid var(--c-border);
+  padding-left: 1rem;
+  /* PLACEHOLDER: your research tagline */
+}
+
+.hero-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.hero-link {
+  font-family: var(--font-classic);
+  font-size: 0.78rem;
+  color: var(--c-accent);
+  border: 1px solid var(--c-border);
+  padding: 0.3rem 0.75rem;
+  border-radius: 2px;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+
+.hero-link:hover {
+  background: var(--c-accent);
+  color: white;
+  border-color: var(--c-accent);
+}
+
+/* Classic Content Sections */
+.classic-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.c-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.c-section.visible { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  font-family: var(--font-classic);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--c-text);
+  border-bottom: 1px solid var(--c-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.02em;
+}
+
+/* Publication cards */
+.pub-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.pub-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--c-accent);
+}
+
+.pub-card .pub-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+  /* PLACEHOLDER */
+}
+
+.pub-card .pub-meta {
+  font-size: 0.82rem;
+  color: var(--c-muted);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.pub-card .pub-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.pub-tag {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid var(--c-border);
+  color: var(--c-muted);
+  letter-spacing: 0.03em;
+}
+
+/* Project cards */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.project-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  padding: 1.5rem;
+}
+
+.project-card .proj-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-card .proj-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.project-card .proj-desc {
+  font-size: 0.85rem;
+  color: var(--c-muted);
+  line-height: 1.5;
+}
+
+.status-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  border: 1px solid;
+}
+
+.status-badge.active {
+  color: #2a6a2a;
+  border-color: #aadaaa;
+  background: #f0fff0;
+}
+
+.status-badge.ongoing {
+  color: #3a4a8a;
+  border-color: #aabada;
+  background: #f0f0ff;
+}
+
+/* Course cards */
+.course-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.course-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  padding: 1.25rem 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.course-level {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.course-card .course-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.course-card .course-meta {
+  font-size: 0.82rem;
+  color: var(--c-muted);
+}
+
+/* Tools */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.tool-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: var(--c-text);
+  display: block;
+}
+
+.tool-card:hover {
+  border-color: var(--c-accent);
+  transform: translateY(-2px);
+}
+
+.tool-card .tool-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.tool-card .tool-name { font-weight: 500; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.tool-card .tool-desc { font-size: 0.78rem; color: var(--c-muted); }
+
+/* Classic footer */
+.classic-footer {
+  max-width: 900px;
+  margin: 4rem auto 0;
+  padding: 2rem;
+  border-top: 1px solid var(--c-border);
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--c-muted);
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RPG MODE
+══════════════════════════════════════════════════════════════ */
+body.rpg-mode {
+  background: var(--rpg-bg);
+  color: var(--rpg-text);
+}
+
+/* Animated background texture */
+body.rpg-mode::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(92,63,26,0.07) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(92,63,26,0.07) 40px);
+  animation: gridScroll 20s linear infinite;
+}
+
+@keyframes gridScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* Steam particles */
+.steam-particle {
+  position: fixed;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(74, 122, 138, 0.3);
+  pointer-events: none;
+  z-index: 1;
+  animation: steamRise var(--dur, 8s) ease-in infinite;
+  animation-delay: var(--delay, 0s);
+  left: var(--x, 50%);
+}
+
+@keyframes steamRise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0.4; }
+  50% { transform: translateY(-40vh) scaleX(2); opacity: 0.15; }
+  100% { transform: translateY(-80vh) scaleX(3); opacity: 0; }
+}
+
+/* RPG wrapper */
+#rpg-wrapper {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* RPG Header — status bar */
+.rpg-header {
+  background: linear-gradient(180deg, #0d0804 0%, #160e06 100%);
+  border-bottom: 2px solid var(--rpg-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 1px 0 rgba(201,133,10,0.2);
+}
+
+/* RPG Title bar */
+.rpg-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid rgba(92,63,26,0.5);
+}
+
+.rpg-title-name {
+  font-family: var(--font-rpg-display);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--rpg-gold);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 20px rgba(212,168,67,0.3);
+}
+
+.rpg-title-class {
+  font-family: var(--font-rpg-title);
+  font-size: 1.1rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.1em;
+}
+
+/* Status bars */
+.rpg-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-block {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  font-family: var(--font-rpg-title);
+  font-size: 1rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.08em;
+  min-width: 28px;
+}
+
+.stat-bar-wrap {
+  width: 80px;
+  height: 10px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(92,63,26,0.5);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  position: relative;
+  transition: width 1s ease;
+}
+
+.stat-bar-fill.hp { background: linear-gradient(90deg, #a02020, #e04040); width: 85%; }
+.stat-bar-fill.mp { background: linear-gradient(90deg, #1a3a8a, #4060c0); width: 70%; }
+
+.stat-value {
+  font-family: var(--font-rpg-title);
+  font-size: 0.95rem;
+  color: var(--rpg-text);
+  min-width: 50px;
+}
+
+.rpg-exp-block {
+  margin-left: auto;
+  text-align: right;
+}
+
+.exp-text {
+  font-family: var(--font-rpg-title);
+  font-size: 0.95rem;
+  color: var(--rpg-dim);
+}
+
+.exp-bar-wrap {
+  width: 120px;
+  height: 6px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(92,63,26,0.4);
+  border-radius: 1px;
+  margin-top: 3px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  height: 100%;
+  width: 62%;
+  background: linear-gradient(90deg, #5c3fa0, #9060d0);
+  border-radius: 1px;
+}
+
+.rpg-switch-btn {
+  font-family: var(--font-rpg-title);
+  font-size: 0.9rem;
+  color: var(--rpg-dim);
+  background: none;
+  border: 1px solid rgba(92,63,26,0.5);
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.08em;
+}
+
+.rpg-switch-btn:hover {
+  border-color: var(--rpg-border-glow);
+  color: var(--rpg-gold);
+}
+
+/* RPG Navigation */
+.rpg-nav {
+  background: #100c05;
+  border-bottom: 1px solid var(--rpg-border);
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.rpg-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0;
+}
+
+.rpg-nav li { position: relative; }
+
+.rpg-nav li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.7rem 1.4rem;
+  font-family: var(--font-rpg-title);
+  font-size: 1.1rem;
+  color: var(--rpg-dim);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  border-right: 1px solid rgba(92,63,26,0.25);
+}
+
+.rpg-nav li a .nav-icon {
+  font-size: 1.3rem;
+}
+
+.rpg-nav li a:hover,
+.rpg-nav li a.active {
+  color: var(--rpg-gold);
+  border-bottom-color: var(--rpg-gold);
+  background: rgba(212,168,67,0.05);
+  text-shadow: 0 0 10px rgba(212,168,67,0.3);
+}
+
+/* RPG Main layout */
+.rpg-main {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0;
+  flex: 1;
+  min-height: calc(100vh - 120px);
+}
+
+/* Side panel */
+.rpg-sidepanel {
+  background: var(--rpg-surface);
+  border-right: 2px solid var(--rpg-border);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Character sprite placeholder */
+.rpg-sprite-frame {
+  border: 2px solid var(--rpg-border);
+  background: rgba(0,0,0,0.5);
+  border-radius: 2px;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  /* PLACEHOLDER: replace the emoji sprite with an actual pixel art image */
+  /* background-image: url('assets/sprite.gif'); */
+  /* background-size: contain; */
+  /* background-repeat: no-repeat; */
+  /* background-position: center; */
+}
+
+.rpg-sprite-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 1px, rgba(0,0,0,0.08) 2px
+  );
+  pointer-events: none;
+}
+
+.sprite-emoji {
+  font-size: 4rem;
+  /* PLACEHOLDER: your pixel art sprite */
+  animation: spriteBob 2s ease-in-out infinite;
+  line-height: 1;
+}
+
+@keyframes spriteBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.sprite-label {
+  font-family: var(--font-rpg-title);
+  font-size: 0.85rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+
+/* Side stats panel */
+.rpg-stats-panel {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  padding: 0.75rem;
+}
+
+.stats-panel-title {
+  font-family: var(--font-rpg-title);
+  font-size: 1rem;
+  color: var(--rpg-gold);
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(92,63,26,0.4);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0;
+}
+
+.stat-row .s-label {
+  font-family: var(--font-rpg-title);
+  font-size: 0.9rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.05em;
+}
+
+.stat-row .s-value {
+  font-family: var(--font-rpg-title);
+  font-size: 0.9rem;
+  color: var(--rpg-text);
+}
+
+/* Equipped items */
+.rpg-equip-panel {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  padding: 0.75rem;
+}
+
+.equip-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(92,63,26,0.2);
+}
+
+.equip-slot:last-child { border-bottom: none; }
+
+.equip-slot-label {
+  font-family: var(--font-rpg-title);
+  font-size: 0.8rem;
+  color: var(--rpg-dim);
+  min-width: 48px;
+}
+
+.equip-slot-value {
+  font-family: var(--font-rpg-title);
+  font-size: 0.8rem;
+  color: var(--rpg-gold-light);
+  /* PLACEHOLDER: your equipment items */
+}
+
+/* RPG Content area */
+.rpg-content {
+  padding: 2rem 2rem 2rem 2rem;
+  overflow: hidden;
+}
+
+.r-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.r-section.visible { display: block; }
+
+/* RPG Section title */
+.rpg-section-title {
+  font-family: var(--font-rpg-display);
+  font-size: 1.6rem;
+  color: var(--rpg-gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 0 20px rgba(212,168,67,0.2);
+}
+
+.rpg-section-sub {
+  font-family: var(--font-rpg-serif);
+  font-size: 0.9rem;
+  color: var(--rpg-dim);
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+/* RPG decorative divider */
+.rpg-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.rpg-divider::before,
+.rpg-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rpg-border), transparent);
+}
+
+.rpg-divider-gem {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--rpg-border-glow);
+  transform: rotate(45deg);
+  background: var(--rpg-crystal);
+  box-shadow: 0 0 8px rgba(122, 74, 176, 0.4);
+}
+
+/* RPG Quest card */
+.rpg-quest-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.rpg-quest-card {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.rpg-quest-card:hover {
+  border-color: var(--rpg-border-glow);
+  background: rgba(201,133,10,0.04);
+}
+
+/* Corner ornaments */
+.rpg-quest-card::before,
+.rpg-quest-card::after {
+  position: absolute;
+  font-size: 0.7rem;
+  color: var(--rpg-border);
+  line-height: 1;
+}
+
+.quest-difficulty {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 2px;
+}
+
+.diff-star {
+  width: 8px;
+  height: 8px;
+  background: var(--rpg-gold);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.diff-star.empty { background: rgba(92,63,26,0.5); }
+
+.quest-title {
+  font-family: var(--font-rpg-display);
+  font-size: 1rem;
+  color: var(--rpg-gold-light);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  padding-right: 4rem;
+  /* PLACEHOLDER: quest title */
+}
+
+.quest-desc {
+  font-family: var(--font-rpg-serif);
+  font-size: 0.88rem;
+  color: var(--rpg-text-dim);
+  line-height: 1.5;
+  font-style: italic;
+  /* PLACEHOLDER: quest description */
+}
+
+.quest-footer {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.quest-tag {
+  font-family: var(--font-rpg-title);
+  font-size: 0.78rem;
+  color: var(--rpg-steam);
+  border: 1px solid rgba(74,122,138,0.35);
+  padding: 0.1rem 0.5rem;
+  border-radius: 1px;
+  letter-spacing: 0.05em;
+}
+
+.quest-status {
+  font-family: var(--font-rpg-title);
+  font-size: 0.78rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 1px;
+  letter-spacing: 0.08em;
+}
+
+.quest-status.active {
+  color: #60d060;
+  border: 1px solid rgba(96,208,96,0.3);
+}
+
+.quest-status.completed {
+  color: var(--rpg-gold);
+  border: 1px solid rgba(212,168,67,0.3);
+}
+
+/* Spellbook (publications) */
+.rpg-spell-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.rpg-spell-card {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.25);
+  border-radius: 2px;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--rpg-crystal);
+  transition: all 0.2s;
+}
+
+.rpg-spell-card:hover {
+  background: rgba(122,74,176,0.06);
+  border-left-color: #a070e0;
+}
+
+.spell-title {
+  font-family: var(--font-rpg-serif);
+  font-size: 1rem;
+  color: var(--rpg-text);
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+  /* PLACEHOLDER */
+}
+
+.spell-meta {
+  font-family: var(--font-rpg-title);
+  font-size: 0.85rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.spell-type-badge {
+  font-family: var(--font-rpg-title);
+  font-size: 0.8rem;
+  color: var(--rpg-crystal);
+  border: 1px solid rgba(122,74,176,0.4);
+  padding: 0.1rem 0.5rem;
+  border-radius: 1px;
+  letter-spacing: 0.06em;
+}
+
+/* Library (courses) */
+.rpg-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.rpg-tome {
+  border: 1px solid var(--rpg-border);
+  background: linear-gradient(160deg, #1a1208 0%, #0d0a06 100%);
+  border-radius: 2px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.rpg-tome::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--rpg-border-glow), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.rpg-tome:hover {
+  border-color: var(--rpg-border-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.rpg-tome:hover::before { opacity: 1; }
+
+.tome-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+
+.tome-title {
+  font-family: var(--font-rpg-display);
+  font-size: 0.9rem;
+  color: var(--rpg-gold-light);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+  /* PLACEHOLDER */
+}
+
+.tome-level {
+  font-family: var(--font-rpg-title);
+  font-size: 0.85rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.06em;
+}
+
+/* RPG Tools (forge) */
+.rpg-forge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.rpg-tool-card {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  transition: all 0.25s;
+}
+
+.rpg-tool-card:hover {
+  border-color: var(--rpg-steam);
+  background: rgba(74,122,138,0.06);
+  transform: translateY(-2px);
+}
+
+.tool-item-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+
+.tool-item-name {
+  font-family: var(--font-rpg-display);
+  font-size: 0.88rem;
+  color: var(--rpg-steam);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
+  /* PLACEHOLDER */
+}
+
+.tool-item-type {
+  font-family: var(--font-rpg-title);
+  font-size: 0.8rem;
+  color: var(--rpg-dim);
+  letter-spacing: 0.05em;
+}
+
+/* RPG Character (bio) */
+.rpg-character-sheet {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.rpg-bio-text {
+  font-family: var(--font-rpg-serif);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--rpg-text);
+  /* PLACEHOLDER: your biography */
+}
+
+.rpg-abilities {
+  border: 1px solid var(--rpg-border);
+  background: rgba(0,0,0,0.3);
+  border-radius: 2px;
+  padding: 1.25rem;
+}
+
+.abilities-title {
+  font-family: var(--font-rpg-display);
+  font-size: 0.95rem;
+  color: var(--rpg-gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.ability-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ability-name {
+  font-family: var(--font-rpg-title);
+  font-size: 0.9rem;
+  color: var(--rpg-dim);
+  min-width: 80px;
+  letter-spacing: 0.05em;
+  /* PLACEHOLDER */
+}
+
+.ability-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(92,63,26,0.4);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.ability-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  background: linear-gradient(90deg, #3a5a20, #70a040);
+  transition: width 1s ease;
+  /* PLACEHOLDER: adjust width to reflect skill level */
+}
+
+/* Text cursor animation */
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 1.1em;
+  background: var(--rpg-gold);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Message box style */
+.rpg-msgbox {
+  border: 2px solid var(--rpg-border);
+  background: var(--rpg-surface);
+  border-radius: 2px;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-rpg-serif);
+  font-size: 0.95rem;
+  color: var(--rpg-text);
+  line-height: 1.6;
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.rpg-msgbox::before {
+  content: '▶';
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+  font-size: 0.6rem;
+  color: var(--rpg-gold);
+  animation: blink 1s step-end infinite;
+}
+
+/* Gear decoration - purely CSS */
+.gear-deco {
+  position: fixed;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+  color: var(--rpg-border-glow);
+  font-size: 200px;
+  animation: gearSpin var(--speed, 60s) linear infinite;
+}
+
+@keyframes gearSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .classic-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero-avatar { margin: 0 auto; }
+  .hero-links { justify-content: center; }
+  .rpg-main { grid-template-columns: 1fr; }
+  .rpg-sidepanel { display: none; }
+  .rpg-character-sheet { grid-template-columns: 1fr; }
+  .classic-nav ul { display: none; }
+  .nav-brand { font-size: 0.9rem; }
+}
+
+/* Gear decoration elements */
+.gear-deco-1 {
+  bottom: -80px;
+  right: -80px;
+  --speed: 80s;
+}
+
+.gear-deco-2 {
+  top: 30%;
+  left: -100px;
+  font-size: 160px;
+  --speed: 50s;
+  animation-direction: reverse;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODE SELECTION OVERLAY
+══════════════════════════════════════════════════════════════ -->
+<div id="mode-overlay" role="dialog" aria-label="Choose display mode">
+  <p class="overlay-title">— DR. BASTIEN DEVEAUTOUR —</p>
+  <p class="overlay-sub">Choose thy display mode, traveler</p>
+
+  <div class="mode-cards">
+    <!-- Classic Mode Card -->
+    <div class="mode-card classic">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div class="card-icon">🎓</div>
+      <div class="card-title">Academic</div>
+      <div class="card-desc">A classic, professional interface for colleagues and students.</div>
+      <div class="lang-choice">
+        <button class="lang-btn active" id="lang-fr-btn" onclick="setLang('fr')">Français</button>
+        <button class="lang-btn" id="lang-en-btn" onclick="setLang('en')">English</button>
+      </div>
+      <button class="select-btn" onclick="enterMode('classic')">Enter ↗</button>
+    </div>
+
+    <!-- RPG Mode Card -->
+    <div class="mode-card rpg">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">RPG Mode</div>
+      <div class="card-desc">A steampunk adventure in the world of Science & Knowledge.</div>
+      <div class="lang-choice">
+        <button class="lang-btn active" style="pointer-events:none;opacity:0.5;">English only</button>
+      </div>
+      <button class="select-btn" onclick="enterMode('rpg')">New Game ↗</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MAIN APP CONTAINER
+══════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- ── CLASSIC MODE ────────────────────────────────────────── -->
+  <div id="classic-view">
+    <nav class="classic-nav">
+      <a href="#" class="nav-brand">
+        <span id="c-nav-brand">Dr. [Prénom Nom]</span>
+      </a>
+      <ul>
+        <li><a href="#" class="active" onclick="showSection('c','bio',this)" id="c-nav-bio">Bio & CV</a></li>
+        <li><a href="#" onclick="showSection('c','projects',this)" id="c-nav-projects">Recherche</a></li>
+        <li><a href="#" onclick="showSection('c','pubs',this)" id="c-nav-pubs">Publications</a></li>
+        <li><a href="#" onclick="showSection('c','courses',this)" id="c-nav-courses">Cours</a></li>
+        <li><a href="#" onclick="showSection('c','tools',this)" id="c-nav-tools">Outils</a></li>
+      </ul>
+      <div class="nav-lang">
+        <button id="c-lang-fr" class="active" onclick="setLang('fr');applyLang()">FR</button>
+        <button id="c-lang-en" onclick="setLang('en');applyLang()">EN</button>
+        <button class="switch-mode-btn" onclick="showOverlay()">⚙ RPG Mode</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="classic-hero">
+      <div class="hero-avatar">
+        <!-- PLACEHOLDER: Replace this div content with <img src="assets/photo.jpg" alt="Photo"> -->
+        👤
+      </div>
+      <div class="hero-info">
+        <h1>[Prénom NOM]</h1>
+        <p class="title-line">
+          <!-- PLACEHOLDER: Your exact title -->
+          Maître de Conférences / Associate Professor
+        </p>
+        <p class="institution">
+          <!-- PLACEHOLDER: Your institution & lab -->
+          [Université / École] — [Laboratoire / UMR XXXX]
+        </p>
+        <p class="tagline">
+          <!-- PLACEHOLDER: A sentence about your research -->
+          « Mes recherches portent sur [domaine 1], [domaine 2] et leurs applications à [domaine 3]. »
+        </p>
+        <div class="hero-links">
+          <!-- PLACEHOLDER: Add/remove links as needed -->
+          <a href="mailto:prenom.nom@univ.fr" class="hero-link">✉ Email</a>
+          <a href="#" class="hero-link">🎓 Google Scholar</a>
+          <a href="#" class="hero-link">🔬 ORCID</a>
+          <a href="#" class="hero-link">💻 GitHub</a>
+          <a href="assets/cv.pdf" class="hero-link">📄 CV (PDF)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classic Sections -->
+    <main class="classic-main">
+
+      <!-- BIO / CV -->
+      <section id="c-section-bio" class="c-section visible">
+        <h2 class="section-title" id="c-title-bio">Biographie & Curriculum Vitae</h2>
+
+        <p style="line-height:1.8; margin-bottom:1.5rem; color:var(--c-muted);">
+          <!-- PLACEHOLDER: 2-3 paragraphs of bio text -->
+          [Paragraphe biographique 1 : parcours académique, formation, institution actuelle…]
+        </p>
+        <p style="line-height:1.8; margin-bottom:2rem; color:var(--c-muted);">
+          [Paragraphe biographique 2 : intérêts de recherche, approche, collaborations…]
+        </p>
+
+        <!-- Mini CV timeline -->
+        <h3 style="font-weight:400; font-size:1.1rem; margin-bottom:1rem; color:var(--c-text);">Positions</h3>
+        <!-- PLACEHOLDER: Repeat this block for each position -->
+        <div style="display:flex; gap:1.5rem; align-items:start; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--c-border);">
+          <div style="min-width:80px; font-size:0.8rem; color:var(--c-muted); padding-top:0.15rem;">2020 – ···</div>
+          <div>
+            <div style="font-weight:500;">[Intitulé du poste]</div>
+            <div style="font-size:0.85rem; color:var(--c-muted);">[Établissement], [Ville]</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:1.5rem; align-items:start; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--c-border);">
+          <div style="min-width:80px; font-size:0.8rem; color:var(--c-muted); padding-top:0.15rem;">2017 – 2020</div>
+          <div>
+            <div style="font-weight:500;">[Poste précédent]</div>
+            <div style="font-size:0.85rem; color:var(--c-muted);">[Établissement], [Ville]</div>
+          </div>
+        </div>
+
+        <h3 style="font-weight:400; font-size:1.1rem; margin-bottom:1rem; margin-top:1.5rem; color:var(--c-text);">Formation</h3>
+        <!-- PLACEHOLDER: Degrees -->
+        <div style="display:flex; gap:1.5rem; align-items:start; margin-bottom:1rem;">
+          <div style="min-width:80px; font-size:0.8rem; color:var(--c-muted); padding-top:0.15rem;">2014 – 2017</div>
+          <div>
+            <div style="font-weight:500;">Doctorat en [Discipline]</div>
+            <div style="font-size:0.85rem; color:var(--c-muted);">[Université], [Ville] — Dir. : [Directeur de thèse]</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESEARCH PROJECTS -->
+      <section id="c-section-projects" class="c-section">
+        <h2 class="section-title" id="c-title-projects">Projets de Recherche</h2>
+        <div class="project-grid">
+          <!-- PLACEHOLDER: Repeat project-card for each project -->
+          <div class="project-card">
+            <div class="proj-icon">🔬</div>
+            <div class="proj-title">[Titre du projet 1]</div>
+            <div class="proj-desc">[Description courte du projet, financement, partenaires…]</div>
+            <span class="status-badge active">En cours</span>
+          </div>
+          <div class="project-card">
+            <div class="proj-icon">💡</div>
+            <div class="proj-title">[Titre du projet 2]</div>
+            <div class="proj-desc">[Description courte du projet…]</div>
+            <span class="status-badge ongoing">Soumis</span>
+          </div>
+          <div class="project-card">
+            <div class="proj-icon">🤝</div>
+            <div class="proj-title">[Projet collaboratif 3]</div>
+            <div class="proj-desc">[Description courte…]</div>
+            <span class="status-badge active">En cours</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PUBLICATIONS -->
+      <section id="c-section-pubs" class="c-section">
+        <h2 class="section-title" id="c-title-pubs">Publications</h2>
+        <div class="pub-list">
+          <!-- PLACEHOLDER: Repeat pub-card for each publication -->
+          <div class="pub-card">
+            <div class="pub-title">[Titre de l'article 1]</div>
+            <div class="pub-meta">[Auteur(s)], <em>[Journal]</em>, [Année], vol. [X], p. [XX–XX]</div>
+            <div class="pub-tags">
+              <span class="pub-tag">DOI</span>
+              <span class="pub-tag">[Thème 1]</span>
+              <span class="pub-tag">[Thème 2]</span>
+            </div>
+          </div>
+          <div class="pub-card">
+            <div class="pub-title">[Titre de l'article 2]</div>
+            <div class="pub-meta">[Auteur(s)], <em>[Conférence / Journal]</em>, [Année]</div>
+            <div class="pub-tags">
+              <span class="pub-tag">PDF</span>
+              <span class="pub-tag">[Thème]</span>
+            </div>
+          </div>
+          <div class="pub-card">
+            <div class="pub-title">[Titre livre / chapitre 3]</div>
+            <div class="pub-meta">[Auteur(s)], <em>[Éditeur]</em>, [Année]</div>
+            <div class="pub-tags">
+              <span class="pub-tag">ISBN</span>
+              <span class="pub-tag">Ouvrage</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COURSES -->
+      <section id="c-section-courses" class="c-section">
+        <h2 class="section-title" id="c-title-courses">Enseignements</h2>
+        <div class="course-list">
+          <!-- PLACEHOLDER: Repeat course-card for each course -->
+          <div class="course-card">
+            <div class="course-level">L3</div>
+            <div>
+              <div class="course-title">[Nom du cours 1]</div>
+              <div class="course-meta">[Programme / Parcours] — [Nb] heures — [Université]</div>
+            </div>
+          </div>
+          <div class="course-card">
+            <div class="course-level">M1</div>
+            <div>
+              <div class="course-title">[Nom du cours 2]</div>
+              <div class="course-meta">[Programme / Parcours] — [Nb] heures — [Université]</div>
+            </div>
+          </div>
+          <div class="course-card">
+            <div class="course-level">M2</div>
+            <div>
+              <div class="course-title">[Nom du cours 3 — Séminaire]</div>
+              <div class="course-meta">[Programme] — [Nb] heures</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLS -->
+      <section id="c-section-tools" class="c-section">
+        <h2 class="section-title" id="c-title-tools">Outils & Ressources</h2>
+        <div class="tools-grid">
+          <!-- PLACEHOLDER: Repeat tool-card for each tool/resource -->
+          <a href="#" class="tool-card">
+            <div class="tool-icon">📦</div>
+            <div class="tool-name">[Package / Logiciel 1]</div>
+            <div class="tool-desc">[Description courte, langage, lien GitHub…]</div>
+          </a>
+          <a href="#" class="tool-card">
+            <div class="tool-icon">📊</div>
+            <div class="tool-name">[Dataset 2]</div>
+            <div class="tool-desc">[Description de la base de données…]</div>
+          </a>
+          <a href="#" class="tool-card">
+            <div class="tool-icon">🗂</div>
+            <div class="tool-name">[Outil 3]</div>
+            <div class="tool-desc">[Description…]</div>
+          </a>
+          <a href="#" class="tool-card">
+            <div class="tool-icon">🌐</div>
+            <div class="tool-name">[Application web 4]</div>
+            <div class="tool-desc">[Description…]</div>
+          </a>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="classic-footer">
+      <!-- PLACEHOLDER: update year and name -->
+      © [Année] [Prénom Nom] · [Université] · <a href="mailto:prenom.nom@univ.fr" style="color:var(--c-muted);">prenom.nom@univ.fr</a>
+    </footer>
+  </div><!-- /classic-view -->
+
+
+  <!-- ── RPG MODE ────────────────────────────────────────────── -->
+  <div id="rpg-view" style="display:none;">
+    <!-- Steam particles (generated by JS) -->
+    <div id="steam-container"></div>
+
+    <!-- Gear decorations -->
+    <div class="gear-deco gear-deco-1" aria-hidden="true">⚙</div>
+    <div class="gear-deco gear-deco-2" aria-hidden="true">⚙</div>
+
+    <div id="rpg-wrapper">
+      <!-- Header / Status Bar -->
+      <header class="rpg-header">
+        <div class="rpg-titlebar">
+          <span class="rpg-title-name">
+            <!-- PLACEHOLDER: Your name in RPG style -->
+            DR. [FIRSTNAME LASTNAME]
+          </span>
+          <span class="rpg-title-class">
+            <!-- PLACEHOLDER: Your RPG class / role -->
+            ✦ ARCANE SCIENTIST · LV.12 ✦
+          </span>
+          <button class="rpg-switch-btn" onclick="showOverlay()">◀ EXIT</button>
+        </div>
+        <div class="rpg-statusbar">
+          <div class="stat-block">
+            <span class="stat-label">HP</span>
+            <div class="stat-bar-wrap"><div class="stat-bar-fill hp"></div></div>
+            <!-- PLACEHOLDER: HP values (purely decorative) -->
+            <span class="stat-value">850/999</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">MP</span>
+            <div class="stat-bar-wrap"><div class="stat-bar-fill mp"></div></div>
+            <!-- PLACEHOLDER: MP values -->
+            <span class="stat-value">420/600</span>
+          </div>
+          <div class="stat-block" style="margin-left:1rem;">
+            <!-- PLACEHOLDER: Decorative stats -->
+            <span class="stat-label" style="min-width:auto; margin-right:0.5rem; color:var(--rpg-gold);">PUB</span>
+            <span style="font-family:var(--font-rpg-title); font-size:1rem; color:var(--rpg-text);">XX</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label" style="min-width:auto; margin-right:0.5rem; color:var(--rpg-steam);">H-IDX</span>
+            <span style="font-family:var(--font-rpg-title); font-size:1rem; color:var(--rpg-text);">XX</span>
+          </div>
+          <div class="rpg-exp-block">
+            <div class="exp-text">EXP ·····················</div>
+            <div class="exp-bar-wrap"><div class="exp-fill"></div></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Navigation -->
+      <nav class="rpg-nav" aria-label="RPG navigation">
+        <ul>
+          <li><a href="#" class="active" onclick="showSection('r','character',this)">
+            <span class="nav-icon">🧙</span>CHARACTER
+          </a></li>
+          <li><a href="#" onclick="showSection('r','quests',this)">
+            <span class="nav-icon">📜</span>QUESTS
+          </a></li>
+          <li><a href="#" onclick="showSection('r','spellbook',this)">
+            <span class="nav-icon">📖</span>SPELLBOOK
+          </a></li>
+          <li><a href="#" onclick="showSection('r','library',this)">
+            <span class="nav-icon">🏛</span>LIBRARY
+          </a></li>
+          <li><a href="#" onclick="showSection('r','forge',this)">
+            <span class="nav-icon">⚙</span>TOOLS
+          </a></li>
+        </ul>
+      </nav>
+
+      <!-- Main Layout -->
+      <div class="rpg-main">
+
+        <!-- Side Panel -->
+        <aside class="rpg-sidepanel" aria-label="Character panel">
+          <!-- Sprite -->
+          <div class="rpg-sprite-frame">
+            <!-- PLACEHOLDER: Replace with <img src="assets/sprite.gif" alt="Character sprite"> -->
+            <!-- You can generate a pixel art sprite with tools like Piskel or Aseprite -->
+            <div class="sprite-emoji">🧑‍🔬</div>
+            <div class="sprite-label">READY</div>
+          </div>
+
+          <!-- Stats -->
+          <div class="rpg-stats-panel">
+            <div class="stats-panel-title">✦ ATTRIBUTES ✦</div>
+            <!-- PLACEHOLDER: Adjust values to reflect your skills (purely decorative/fun) -->
+            <div class="stat-row">
+              <span class="s-label">STR</span><span class="s-value">42</span>
+            </div>
+            <div class="stat-row">
+              <span class="s-label">INT</span><span class="s-value">98</span>
+            </div>
+            <div class="stat-row">
+              <span class="s-label">WIS</span><span class="s-value">87</span>
+            </div>
+            <div class="stat-row">
+              <span class="s-label">DEX</span><span class="s-value">65</span>
+            </div>
+            <div class="stat-row">
+              <span class="s-label">CHA</span><span class="s-value">74</span>
+            </div>
+            <div class="stat-row">
+              <span class="s-label">LCK</span><span class="s-value">33</span>
+            </div>
+          </div>
+
+          <!-- Equipment -->
+          <div class="rpg-equip-panel">
+            <div class="stats-panel-title">✦ EQUIPPED ✦</div>
+            <!-- PLACEHOLDER: Replace with your actual tools/expertise -->
+            <div class="equip-slot">
+              <span class="equip-slot-label">WEAPON</span>
+              <span class="equip-slot-value">Python Wand+5</span>
+            </div>
+            <div class="equip-slot">
+              <span class="equip-slot-label">ARMOR</span>
+              <span class="equip-slot-value">Peer Review Shield</span>
+            </div>
+            <div class="equip-slot">
+              <span class="equip-slot-label">RELIC</span>
+              <span class="equip-slot-value">CNRS Medallion</span>
+            </div>
+            <div class="equip-slot">
+              <span class="equip-slot-label">ACC.</span>
+              <span class="equip-slot-value">Tenure Ring</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="rpg-content">
+
+          <!-- CHARACTER (Bio & CV) -->
+          <section id="r-section-character" class="r-section visible">
+            <h2 class="rpg-section-title">⚜ CHARACTER SHEET</h2>
+            <p class="rpg-section-sub">The chronicles of a wandering scientist</p>
+
+            <div class="rpg-character-sheet">
+              <div>
+                <div class="rpg-bio-text">
+                  <!-- PLACEHOLDER: Your biography in RPG-flavored English -->
+                  <p style="margin-bottom:1rem;">
+                    Born in the age of [Year], [Your Name] first took up the arcane arts of
+                    [Your Field] at the famed academy of [University]. After years of
+                    apprenticeship under the legendary [Supervisor Name], they earned the
+                    title of <em>Doctor of Philosophy</em> in [Year].
+                  </p>
+                  <p style="margin-bottom:1rem;">
+                    Now stationed at the Guild of [Institution], they dedicate their power
+                    to unraveling the mysteries of [Research Topic 1] and [Research Topic 2],
+                    armed with [Your Methods] and an unquenchable thirst for knowledge.
+                  </p>
+                  <p>
+                    Their work has been recognized by [Awards / Distinctions], and they
+                    continue to train a new generation of scholars in the arcane arts.
+                    <span class="cursor-blink"></span>
+                  </p>
+                </div>
+
+                <!-- Timeline -->
+                <div class="rpg-divider"><div class="rpg-divider-gem"></div></div>
+
+                <!-- PLACEHOLDER: Repeat for each position -->
+                <div style="display:flex; gap:1rem; margin-bottom:0.85rem; align-items:start;">
+                  <span style="font-family:var(--font-rpg-title); font-size:0.8rem; color:var(--rpg-steam); min-width:70px;">2020–NOW</span>
+                  <div>
+                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">[Current Position]</div>
+                    <div style="font-family:var(--font-rpg-title); font-size:0.78rem; color:var(--rpg-dim);">[Institution]</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:0.85rem; align-items:start;">
+                  <span style="font-family:var(--font-rpg-title); font-size:0.8rem; color:var(--rpg-steam); min-width:70px;">2017–2020</span>
+                  <div>
+                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">[Previous Role]</div>
+                    <div style="font-family:var(--font-rpg-title); font-size:0.78rem; color:var(--rpg-dim);">[Institution]</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Abilities -->
+              <div>
+                <div class="rpg-abilities">
+                  <div class="abilities-title">✦ SKILLS & ABILITIES ✦</div>
+                  <!-- PLACEHOLDER: Replace with your actual skills, adjust bar widths -->
+                  <div class="ability-row">
+                    <span class="ability-name">[Skill 1]</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:90%"></div></div>
+                  </div>
+                  <div class="ability-row">
+                    <span class="ability-name">[Skill 2]</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:75%; background: linear-gradient(90deg, #1a3a6a, #4060b0);"></div></div>
+                  </div>
+                  <div class="ability-row">
+                    <span class="ability-name">[Skill 3]</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:80%; background: linear-gradient(90deg, #4a1a6a, #8040a0);"></div></div>
+                  </div>
+                  <div class="ability-row">
+                    <span class="ability-name">[Skill 4]</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:65%; background: linear-gradient(90deg, #3a4a1a, #608020);"></div></div>
+                  </div>
+                  <div class="ability-row">
+                    <span class="ability-name">[Skill 5]</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:85%"></div></div>
+                  </div>
+                </div>
+
+                <div class="rpg-msgbox">
+                  <!-- PLACEHOLDER: A short RPG flavor text about yourself -->
+                  "The scholar who forges new knowledge from the raw ore of data,
+                  wielding equations like a blade and curiosity like a compass."
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- QUESTS (Research Projects) -->
+          <section id="r-section-quests" class="r-section">
+            <h2 class="rpg-section-title">📜 ACTIVE QUESTS</h2>
+            <p class="rpg-section-sub">Research missions currently underway</p>
+            <div class="rpg-quest-list">
+              <!-- PLACEHOLDER: Repeat rpg-quest-card for each project -->
+              <div class="rpg-quest-card">
+                <div class="quest-difficulty">
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star empty"></div>
+                  <div class="diff-star empty"></div>
+                </div>
+                <div class="quest-title">[Project Name 1]</div>
+                <div class="quest-desc">
+                  [Description of the research project, framed as a quest narrative.
+                  What mystery are you solving? What is at stake?]
+                </div>
+                <div class="quest-footer">
+                  <span class="quest-status active">▶ IN PROGRESS</span>
+                  <span class="quest-tag">[Funding: ANR / ERC / …]</span>
+                  <span class="quest-tag">[Topic tag]</span>
+                </div>
+              </div>
+
+              <div class="rpg-quest-card">
+                <div class="quest-difficulty">
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star empty"></div>
+                </div>
+                <div class="quest-title">[Project Name 2]</div>
+                <div class="quest-desc">
+                  [Description of the second research project…]
+                </div>
+                <div class="quest-footer">
+                  <span class="quest-status active">▶ IN PROGRESS</span>
+                  <span class="quest-tag">[Collaborators]</span>
+                  <span class="quest-tag">[Method]</span>
+                </div>
+              </div>
+
+              <div class="rpg-quest-card">
+                <div class="quest-difficulty">
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                  <div class="diff-star"></div>
+                </div>
+                <div class="quest-title">[Completed Quest 3]</div>
+                <div class="quest-desc">
+                  [Description of a completed project…]
+                </div>
+                <div class="quest-footer">
+                  <span class="quest-status completed">✓ COMPLETED</span>
+                  <span class="quest-tag">[Year]</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SPELLBOOK (Publications) -->
+          <section id="r-section-spellbook" class="r-section">
+            <h2 class="rpg-section-title">📖 THE SPELLBOOK</h2>
+            <p class="rpg-section-sub">Grimoires and scrolls of arcane knowledge</p>
+            <div class="rpg-spell-list">
+              <!-- PLACEHOLDER: Repeat rpg-spell-card for each publication -->
+              <div class="rpg-spell-card">
+                <div class="spell-title">[Title of Publication 1]</div>
+                <div class="spell-meta">[Author(s)] · [Journal/Conference] · [Year]</div>
+                <span class="spell-type-badge">JOURNAL</span>
+              </div>
+              <div class="rpg-spell-card">
+                <div class="spell-title">[Title of Publication 2]</div>
+                <div class="spell-meta">[Author(s)] · [Conference] · [Year]</div>
+                <span class="spell-type-badge">PROCEEDINGS</span>
+              </div>
+              <div class="rpg-spell-card">
+                <div class="spell-title">[Book / Chapter 3]</div>
+                <div class="spell-meta">[Author(s)] · [Publisher] · [Year]</div>
+                <span class="spell-type-badge">TOME</span>
+              </div>
+              <div class="rpg-spell-card">
+                <div class="spell-title">[Title of Publication 4]</div>
+                <div class="spell-meta">[Author(s)] · [Journal] · [Year]</div>
+                <span class="spell-type-badge">JOURNAL</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- LIBRARY (Courses) -->
+          <section id="r-section-library" class="r-section">
+            <h2 class="rpg-section-title">🏛 THE GRAND LIBRARY</h2>
+            <p class="rpg-section-sub">Tomes of knowledge for apprentice scholars</p>
+            <div class="rpg-library-grid">
+              <!-- PLACEHOLDER: Repeat rpg-tome for each course -->
+              <div class="rpg-tome" onclick="">
+                <span class="tome-icon">📗</span>
+                <div class="tome-title">[Course Name 1]</div>
+                <div class="tome-level">LV.3 · Undergraduate</div>
+              </div>
+              <div class="rpg-tome">
+                <span class="tome-icon">📘</span>
+                <div class="tome-title">[Course Name 2]</div>
+                <div class="tome-level">LV.5 · Master 1</div>
+              </div>
+              <div class="rpg-tome">
+                <span class="tome-icon">📕</span>
+                <div class="tome-title">[Course Name 3]</div>
+                <div class="tome-level">LV.7 · Master 2</div>
+              </div>
+              <div class="rpg-tome">
+                <span class="tome-icon">📙</span>
+                <div class="tome-title">[Seminar / Workshop]</div>
+                <div class="tome-level">LV.9 · Doctoral</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TOOLS / FORGE -->
+          <section id="r-section-forge" class="r-section">
+            <h2 class="rpg-section-title">⚙ THE ARTIFICER'S FORGE</h2>
+            <p class="rpg-section-sub">Instruments and contraptions of scientific inquiry</p>
+            <div class="rpg-forge-grid">
+              <!-- PLACEHOLDER: Repeat rpg-tool-card for each tool/resource -->
+              <a href="#" class="rpg-tool-card">
+                <span class="tool-item-icon">🔧</span>
+                <div class="tool-item-name">[Tool / Package 1]</div>
+                <div class="tool-item-type">SOFTWARE · [Language]</div>
+              </a>
+              <a href="#" class="rpg-tool-card">
+                <span class="tool-item-icon">🗃</span>
+                <div class="tool-item-name">[Dataset 2]</div>
+                <div class="tool-item-type">DATA ARTIFACT</div>
+              </a>
+              <a href="#" class="rpg-tool-card">
+                <span class="tool-item-icon">⚗</span>
+                <div class="tool-item-name">[Tool 3]</div>
+                <div class="tool-item-type">ANALYSIS ENGINE</div>
+              </a>
+              <a href="#" class="rpg-tool-card">
+                <span class="tool-item-icon">🌐</span>
+                <div class="tool-item-name">[Web App 4]</div>
+                <div class="tool-item-type">WEB CONTRAPTION</div>
+              </a>
+            </div>
+          </section>
+
+        </main>
+      </div><!-- /rpg-main -->
+    </div><!-- /rpg-wrapper -->
+  </div><!-- /rpg-view -->
+
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════════ -->
+<script>
+// ── State ─────────────────────────────────────────────────────
+let currentLang = 'fr';
+let currentMode = null;
+
+// ── Translation strings ───────────────────────────────────────
+const i18n = {
+  fr: {
+    navBio: 'Bio & CV',
+    navProjects: 'Recherche',
+    navPubs: 'Publications',
+    navCourses: 'Cours',
+    navTools: 'Outils',
+    titleBio: 'Biographie & Curriculum Vitae',
+    titleProjects: 'Projets de Recherche',
+    titlePubs: 'Publications',
+    titleCourses: 'Enseignements',
+    titleTools: 'Outils & Ressources',
+  },
+  en: {
+    navBio: 'Bio & CV',
+    navProjects: 'Research',
+    navPubs: 'Publications',
+    navCourses: 'Teaching',
+    navTools: 'Tools',
+    titleBio: 'Biography & Curriculum Vitae',
+    titleProjects: 'Research Projects',
+    titlePubs: 'Publications',
+    titleCourses: 'Teaching',
+    titleTools: 'Tools & Resources',
+  }
+};
+
+// ── Language functions ─────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.id === 'lang-' + lang + '-btn');
+  });
+  document.getElementById('c-lang-fr').classList.toggle('active', lang === 'fr');
+  document.getElementById('c-lang-en').classList.toggle('active', lang === 'en');
+}
+
+function applyLang() {
+  const t = i18n[currentLang];
+  document.getElementById('c-nav-bio').textContent = t.navBio;
+  document.getElementById('c-nav-projects').textContent = t.navProjects;
+  document.getElementById('c-nav-pubs').textContent = t.navPubs;
+  document.getElementById('c-nav-courses').textContent = t.navCourses;
+  document.getElementById('c-nav-tools').textContent = t.navTools;
+  document.getElementById('c-title-bio').textContent = t.titleBio;
+  document.getElementById('c-title-projects').textContent = t.titleProjects;
+  document.getElementById('c-title-pubs').textContent = t.titlePubs;
+  document.getElementById('c-title-courses').textContent = t.titleCourses;
+  document.getElementById('c-title-tools').textContent = t.titleTools;
+}
+
+// ── Mode switching ─────────────────────────────────────────────
+function enterMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-overlay').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+
+  if (mode === 'classic') {
+    document.getElementById('classic-view').style.display = 'block';
+    document.getElementById('rpg-view').style.display = 'none';
+    document.body.classList.remove('rpg-mode');
+    applyLang();
+  } else {
+    document.getElementById('classic-view').style.display = 'none';
+    document.getElementById('rpg-view').style.display = 'block';
+    document.body.classList.add('rpg-mode');
+    initSteam();
+    animateBars();
+  }
+}
+
+function showOverlay() {
+  document.getElementById('mode-overlay').style.display = 'flex';
+  document.getElementById('app').classList.remove('active');
+  document.body.classList.remove('rpg-mode');
+}
+
+// ── Section navigation ─────────────────────────────────────────
+function showSection(prefix, name, linkEl) {
+  // Hide all sections in this view
+  document.querySelectorAll((prefix === 'c' ? '.c-section' : '.r-section'))
+    .forEach(s => s.classList.remove('visible'));
+
+  // Show target
+  const target = document.getElementById(prefix + '-section-' + name);
+  if (target) target.classList.add('visible');
+
+  // Update nav active state
+  const navLinks = (prefix === 'c'
+    ? document.querySelectorAll('.classic-nav li a')
+    : document.querySelectorAll('.rpg-nav li a'));
+  navLinks.forEach(l => l.classList.remove('active'));
+  if (linkEl) linkEl.classList.add('active');
+
+  return false;
+}
+
+// ── RPG Steam particles ────────────────────────────────────────
+function initSteam() {
+  const container = document.getElementById('steam-container');
+  if (!container || container.children.length > 0) return;
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.className = 'steam-particle';
+    p.style.setProperty('--x', Math.random() * 100 + 'vw');
+    p.style.setProperty('--dur', (6 + Math.random() * 8) + 's');
+    p.style.setProperty('--delay', (Math.random() * 8) + 's');
+    container.appendChild(p);
+  }
+}
+
+// ── RPG Stat bars animate on load ─────────────────────────────
+function animateBars() {
+  document.querySelectorAll('.ability-bar-fill').forEach(bar => {
+    const w = bar.style.width;
+    bar.style.width = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { bar.style.width = w; });
+    });
+  });
+}
+
+// ── Prevent default on nav links ──────────────────────────────
+document.querySelectorAll('a[href="#"]').forEach(a => {
+  a.addEventListener('click', e => e.preventDefault());
+});
+</script>
+</body>
+</html>
