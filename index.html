@@ -104,7 +104,7 @@ body {
 }
 
 .mode-card {
-  width: 260px;
+  width: 310px;
   border: 1px solid #3a2a0a;
   border-radius: 4px;
   padding: 2rem 1.5rem;
@@ -141,12 +141,40 @@ body {
 }
 .mode-card:hover::before { opacity: 1; }
 
-.mode-card:hover .card-icon { transform: scale(1.1); }
+/*.mode-card:hover .card-icon { transform: scale(1.1); }*/
+
+.mode-card:hover .card-icon img {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 12px rgba(212,168,67,0.9));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
 
 .card-icon {
   font-size: 3rem;
   transition: transform 0.3s;
   line-height: 1;
+}
+
+.card-icon img {
+  width: 256px;
+  height: 256px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+  animation: float 3s ease-in-out infinite,
+             glow 2.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes glow {
+  0%   { filter: drop-shadow(0 0 2px rgba(212,168,67,0.3)); }
+  50%  { filter: drop-shadow(0 0 8px rgba(212,168,67,0.7)); }
+  100% { filter: drop-shadow(0 0 2px rgba(212,168,67,0.3)); }
 }
 
 .card-title {
@@ -333,8 +361,8 @@ body {
 }
 
 .hero-avatar {
-  width: 140px;
-  height: 140px;
+  width: 256px;
+  height: 256px;
   border-radius: 50%;
   border: 3px solid var(--c-border);
   background: var(--c-border);
@@ -344,11 +372,10 @@ body {
   font-family: var(--font-classic);
   font-size: 3rem;
   color: var(--c-muted);
-  /* PLACEHOLDER: replace with your actual photo */
-  /* background-image: url('assets/photo.jpg'); */
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .hero-info h1 {
@@ -865,18 +892,26 @@ body.rpg-mode::before {
   border: 2px solid var(--rpg-border);
   background: rgba(0,0,0,0.5);
   border-radius: 2px;
+  width: 100%;
   aspect-ratio: 1;
+  max-width: 220px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  /* PLACEHOLDER: replace the emoji sprite with an actual pixel art image */
-  /* background-image: url('assets/sprite.gif'); */
-  /* background-size: contain; */
-  /* background-repeat: no-repeat; */
-  /* background-position: center; */
+}
+
+/* Sprite image inside RPG panel */
+.rpg-sprite-frame img {
+  width: 256px;
+  height: 256px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+  animation: spriteBob 2s ease-in-out infinite;
 }
 
 .rpg-sprite-frame::before {
@@ -1425,6 +1460,8 @@ body.rpg-mode::before {
   --speed: 50s;
   animation-direction: reverse;
 }
+
+
 </style>
 </head>
 <body>
@@ -1455,7 +1492,9 @@ body.rpg-mode::before {
     <div class="mode-card rpg">
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
-      <div class="card-icon">⚙️</div>
+      <div class="card-icon">
+        <img src="images/pixel-character.png" alt="Personnage pixel art">
+      </div>
       <div class="card-title">RPG Mode</div>
       <div class="card-desc">A steampunk adventure in the world of Science & Knowledge.</div>
       <div class="lang-choice">
@@ -1494,8 +1533,11 @@ body.rpg-mode::before {
     <!-- Hero -->
     <div class="classic-hero">
       <div class="hero-avatar">
-        <!-- PLACEHOLDER: Replace this div content with <img src="assets/photo.jpg" alt="Photo"> -->
-        👤
+        <!-- Replace src with your actual photo path, e.g. src="images/photo.jpg" -->
+        <!-- The 👤 emoji is a fallback if the image is missing -->
+        <img src="images/photo.jpg" alt="Photo de profil"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='👤';"
+             style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;">
       </div>
       <div class="hero-info">
         <h1>[Prénom NOM]</h1>
@@ -1771,10 +1813,14 @@ body.rpg-mode::before {
         <aside class="rpg-sidepanel" aria-label="Character panel">
           <!-- Sprite -->
           <div class="rpg-sprite-frame">
-            <!-- PLACEHOLDER: Replace with <img src="assets/sprite.gif" alt="Character sprite"> -->
-            <!-- You can generate a pixel art sprite with tools like Piskel or Aseprite -->
-            <div class="sprite-emoji">🧑‍🔬</div>
-            <div class="sprite-label">READY</div>
+            <!-- Replace the src below with your actual sprite path -->
+            <!-- e.g. src="images/pixel-character.png" or src="images/sprite.gif" -->
+            <img src="images/pixel-character.png" alt="Character sprite"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="sprite-emoji" style="display:none; flex-direction:column; align-items:center;">
+              🧑‍🔬
+              <span class="sprite-label">READY</span>
+            </div>
           </div>
 
           <!-- Stats -->
