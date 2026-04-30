@@ -162,7 +162,7 @@ body {
   image-rendering: pixelated;
   display: block;
   animation: float 3s ease-in-out infinite,
-             glow 2.5s ease-in-out infinite;
+             glow 3s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -1471,15 +1471,17 @@ body.rpg-mode::before {
 ══════════════════════════════════════════════════════════════ -->
 <div id="mode-overlay" role="dialog" aria-label="Choose display mode">
   <p class="overlay-title">— DR. BASTIEN DEVEAUTOUR —</p>
-  <p class="overlay-sub">Choose thy display mode, traveler</p>
+  <p class="overlay-sub">"I may not know who I really am, but that is my question alone to answer!" — Adelbert Steiner</p>
 
   <div class="mode-cards">
     <!-- Classic Mode Card -->
     <div class="mode-card classic">
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
-      <div class="card-icon">🎓</div>
-      <div class="card-title">Academic</div>
+      <div class="card-icon">
+        <img src="images/Photo_Pro_Portrait.jpg" alt="B_Deveautour">
+      </div>
+      <div class="card-title">Vanilla Mode</div>
       <div class="card-desc">A classic, professional interface for colleagues and students.</div>
       <div class="lang-choice">
         <button class="lang-btn active" id="lang-fr-btn" onclick="setLang('fr')">Français</button>
