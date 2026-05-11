@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2508,7 +2508,7 @@ function updateCharacterProgress(now = new Date()) {
   const expFillEl = document.getElementById('character-exp-fill');
 
   if (levelEl) levelEl.textContent = level;
-  if (expTextEl) expTextEl.textContent = `EXP ${completedWeeks}/${totalWeeks} WEEKS`;
+  if (expTextEl) expTextEl.textContent = `LEVEL progression:  ${completedWeeks}/${totalWeeks} XP`;
   if (expFillEl) expFillEl.style.width = `${expPercent}%`;
 }
 function enterMode(mode) {
