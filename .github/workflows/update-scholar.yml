@@ -1,0 +1,28 @@
+name: Update Scholar Snapshot
+
+on:
+  schedule:
+    # Runs every Monday at 07:15 UTC.
+    - cron: "15 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-scholar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Refresh Google Scholar data
+        shell: pwsh
+        run: ./scripts/update-scholar.ps1
+
+      - name: Commit updated portfolio
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update Google Scholar snapshot"
+          file_pattern: index.html
