@@ -1015,8 +1015,10 @@ body.rpg-mode::before {
 
 /* Sprite image inside RPG panel */
 .rpg-sprite-frame img {
-  width: 256px;
-  height: 256px;
+  width: 88%;
+  height: 88%;
+  max-width: 256px;
+  max-height: 256px;
   object-fit: contain;
   image-rendering: pixelated;
   display: block;
@@ -1542,17 +1544,71 @@ body.rpg-mode::before {
    RESPONSIVE
 ══════════════════════════════════════════════════════════════ */
 @media (max-width: 700px) {
+  #mode-overlay {
+    justify-content: flex-start;
+    gap: 1.25rem;
+    min-height: 100dvh;
+    padding: 1.5rem 1rem max(1.5rem, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #mode-overlay .overlay-title {
+    font-size: clamp(1.1rem, 7vw, 1.7rem);
+    letter-spacing: 0.08em;
+  }
+
+  #mode-overlay .overlay-sub {
+    font-size: 1rem;
+    margin-top: -0.5rem;
+  }
+
+  .mode-cards {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .mode-card {
+    width: min(100%, 340px);
+    padding: 1.25rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .card-icon img {
+    width: clamp(128px, 46vw, 190px);
+    height: clamp(128px, 46vw, 190px);
+  }
+
   .classic-hero {
     grid-template-columns: 1fr;
     text-align: center;
+    padding: 2rem 1rem;
   }
   .hero-avatar { margin: 0 auto; }
   .hero-links { justify-content: center; }
   .rpg-main { grid-template-columns: 1fr; }
   .rpg-sidepanel { display: none; }
   .rpg-character-sheet { grid-template-columns: 1fr; }
+  .classic-nav {
+    height: auto;
+    min-height: 56px;
+    padding: 0.6rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
   .classic-nav ul { display: none; }
   .nav-brand { font-size: 0.9rem; }
+  .nav-lang {
+    margin-left: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .switch-mode-btn {
+    margin-left: 0;
+  }
 }
 
 /* Gear decoration elements */
@@ -1604,7 +1660,7 @@ body.rpg-mode::before {
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
       <div class="card-icon">
-        <img src="images/pixel-character.png" alt="Personnage pixel art">
+        <img src="images/Portrait.png" alt="Portrait">
       </div>
       <div class="card-title">RPG Mode</div>
       <div class="card-desc">A steampunk adventure in the world of Science & Knowledge.</div>
@@ -1646,7 +1702,7 @@ body.rpg-mode::before {
       <div class="hero-avatar">
         <!-- Replace src with your actual photo path, e.g. src="images/photo.jpg" -->
         <!-- The 👤 emoji is a fallback if the image is missing -->
-        <img src="images/photo.jpg" alt="Photo de profil"
+        <img src="images/Portrait.png" alt="Photo de profil"
              onerror="this.style.display='none'; this.parentElement.innerHTML='👤';"
              style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;">
       </div>
