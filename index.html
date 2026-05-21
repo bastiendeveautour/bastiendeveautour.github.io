@@ -877,8 +877,8 @@ body.rpg-mode::before {
   transition: width 1s ease;
 }
 
-.stat-bar-fill.hp { background: linear-gradient(90deg, #a02020, #e04040); width: 85%; }
-.stat-bar-fill.mp { background: linear-gradient(90deg, #1a3a8a, #4060c0); width: 70%; }
+.stat-bar-fill.hp { background: linear-gradient(90deg, #a02020, #e04040); width: 0%; }
+.stat-bar-fill.mp { background: linear-gradient(90deg, #1a3a8a, #4060c0); width: 0%; }
 
 .stat-value {
   font-family: var(--font-rpg-title);
@@ -1925,16 +1925,14 @@ body.rpg-mode::before {
         </div>
         <div class="rpg-statusbar">
           <div class="stat-block">
-            <span class="stat-label">HP</span>
-            <div class="stat-bar-wrap"><div class="stat-bar-fill hp"></div></div>
-            <!-- PLACEHOLDER: HP values (purely decorative) -->
-            <span class="stat-value">850/999</span>
+            <span class="stat-label">SANITY</span>
+            <div class="stat-bar-wrap"><div class="stat-bar-fill hp" id="sanity-bar"></div></div>
+            <span class="stat-value" id="sanity-value">100/100</span>
           </div>
           <div class="stat-block">
-            <span class="stat-label">MP</span>
-            <div class="stat-bar-wrap"><div class="stat-bar-fill mp"></div></div>
-            <!-- PLACEHOLDER: MP values -->
-            <span class="stat-value">420/600</span>
+            <span class="stat-label">CAFFEINE</span>
+            <div class="stat-bar-wrap"><div class="stat-bar-fill mp" id="caffeine-bar"></div></div>
+            <span class="stat-value" id="caffeine-value">0/5</span>
           </div>
           <div class="stat-block" style="margin-left:1rem;">
             <!-- PLACEHOLDER: Decorative stats -->
@@ -1998,19 +1996,19 @@ body.rpg-mode::before {
               <span class="s-label">STR</span><span class="s-value">42</span>
             </div>
             <div class="stat-row">
-              <span class="s-label">INT</span><span class="s-value">98</span>
+              <span class="s-label">INT</span><span class="s-value">85</span>
             </div>
             <div class="stat-row">
-              <span class="s-label">WIS</span><span class="s-value">87</span>
+              <span class="s-label">WIS</span><span class="s-value">65</span>
             </div>
             <div class="stat-row">
-              <span class="s-label">DEX</span><span class="s-value">65</span>
+              <span class="s-label">DEX</span><span class="s-value">75</span>
             </div>
             <div class="stat-row">
-              <span class="s-label">CHA</span><span class="s-value">74</span>
+              <span class="s-label">CHA</span><span class="s-value">80</span>
             </div>
             <div class="stat-row">
-              <span class="s-label">LCK</span><span class="s-value">33</span>
+              <span class="s-label">LCK</span><span class="s-value">95</span>
             </div>
           </div>
 
@@ -2059,7 +2057,7 @@ body.rpg-mode::before {
                     He also joined the secret society of Cactus, a group mavericks who seek to push the boundaries of knowledge through unorthodox spirited gatherings. 
                   </p>
                   <p style="margin-bottom:1rem;">
-                    Now stationed at the scattered Guild of IETR, hosted within the halls of the Polytech Academy in the old Breton capital of Nantes, he dedicates his powers to unraveling the mysteries of thinking engines and the crafting of resilient and lightweight constructs destined for compact embedded artifacts.
+                    Now stationed at the scattered IETR Guild, hosted within the halls of the Polytech Academy in the old Breton capital of Nantes, he dedicates his powers to unraveling the mysteries of thinking engines and the crafting of resilient and lightweight constructs destined for compact embedded artifacts.
                     <span class="cursor-blink"></span>
                   </p>
                 </div>
@@ -2069,17 +2067,24 @@ body.rpg-mode::before {
 
                 <!-- PLACEHOLDER: Repeat for each position -->
                 <div style="display:flex; gap:1rem; margin-bottom:0.85rem; align-items:start;">
-                  <span style="font-family:var(--font-rpg-title); font-size:0.8rem; color:var(--rpg-steam); min-width:70px;">2020–NOW</span>
+                  <span style="font-family:var(--font-rpg-title); font-size:0.9rem; letter-spacing:0.05em; color:var(--rpg-steam); min-width:70px;">2024–NOW</span>
                   <div>
-                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">[Current Position]</div>
-                    <div style="font-family:var(--font-rpg-title); font-size:0.78rem; color:var(--rpg-dim);">[Institution]</div>
+                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">Associate Professor</div>
+                    <div style="font-family:var(--font-rpg-title); font-size:0.85rem; color:var(--rpg-dim);">Polytech - Nantes Université // Institut d'Electronique et des Technologies du numéRique </div>
                   </div>
                 </div>
                 <div style="display:flex; gap:1rem; margin-bottom:0.85rem; align-items:start;">
-                  <span style="font-family:var(--font-rpg-title); font-size:0.8rem; color:var(--rpg-steam); min-width:70px;">2017–2020</span>
+                  <span style="font-family:var(--font-rpg-title); font-size:0.9rem; letter-spacing:0.05em; color:var(--rpg-steam); min-width:70px;">2021–2024</span>
                   <div>
-                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">[Previous Role]</div>
-                    <div style="font-family:var(--font-rpg-title); font-size:0.78rem; color:var(--rpg-dim);">[Institution]</div>
+                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">Associate Professor</div>
+                    <div style="font-family:var(--font-rpg-title); font-size:0.85rem; color:var(--rpg-dim);">CPE Lyon // Laboratoire d'informatique, robotique et microélectronique de Montpellier</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:0.85rem; align-items:start;">
+                  <span style="font-family:var(--font-rpg-title); font-size:0.9rem; letter-spacing:0.05em; color:var(--rpg-steam); min-width:70px;">2017–2021</span>
+                  <div>
+                    <div style="font-family:var(--font-rpg-display); font-size:0.85rem; color:var(--rpg-gold-light);">PhD Student & Assistant Professor</div>
+                    <div style="font-family:var(--font-rpg-title); font-size:0.85rem; color:var(--rpg-dim);">University of Montpellier // Laboratoire d'informatique, robotique et microélectronique de Montpellier</div>
                   </div>
                 </div>
               </div>
@@ -2090,24 +2095,24 @@ body.rpg-mode::before {
                   <div class="abilities-title">✦ SKILLS & ABILITIES ✦</div>
                   <!-- PLACEHOLDER: Replace with your actual skills, adjust bar widths -->
                   <div class="ability-row">
-                    <span class="ability-name">[Skill 1]</span>
+                    <span class="ability-name">VHDL</span>
                     <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:90%"></div></div>
                   </div>
                   <div class="ability-row">
-                    <span class="ability-name">[Skill 2]</span>
+                    <span class="ability-name">BARE METAL C</span>
                     <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:75%; background: linear-gradient(90deg, #1a3a6a, #4060b0);"></div></div>
                   </div>
                   <div class="ability-row">
-                    <span class="ability-name">[Skill 3]</span>
-                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:80%; background: linear-gradient(90deg, #4a1a6a, #8040a0);"></div></div>
+                    <span class="ability-name">TCL/TK</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:98%; background: linear-gradient(90deg, #4a1a6a, #8040a0);"></div></div>
                   </div>
                   <div class="ability-row">
-                    <span class="ability-name">[Skill 4]</span>
-                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:65%; background: linear-gradient(90deg, #3a4a1a, #608020);"></div></div>
+                    <span class="ability-name">ALE COMPASS</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:65%; background: linear-gradient(90deg, #786020, #dcb13c);"></div></div>
                   </div>
                   <div class="ability-row">
-                    <span class="ability-name">[Skill 5]</span>
-                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:85%"></div></div>
+                    <span class="ability-name">GUIDANCE</span>
+                    <div class="ability-bar-bg"><div class="ability-bar-fill" style="width:35%; background: linear-gradient(90deg, #782d20, #dc3c3c);">></div></div>
                   </div>
                 </div>
 
@@ -2564,8 +2569,68 @@ function updateCharacterProgress(now = new Date()) {
   if (expTextEl) expTextEl.textContent = `LEVEL progression:  ${completedWeeks}/${totalWeeks} XP`;
   if (expFillEl) expFillEl.style.width = `${expPercent}%`;
 }
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function dateInYear(year, monthIndex, day) {
+  return new Date(year, monthIndex, day, 0, 0, 0, 0);
+}
+
+function interpolateByDate(now, startDate, startValue, endDate, endValue) {
+  const progress = clamp((now - startDate) / (endDate - startDate), 0, 1);
+  return startValue + (endValue - startValue) * progress;
+}
+
+function calculateCaffeine(now = new Date()) {
+  const hour = now.getHours();
+  if (hour < 9) return 0;
+  if (hour < 12) return 1;
+  if (hour < 15) return 2;
+  if (hour < 18) return 3;
+  return 5;
+}
+
+function calculateSanity(now = new Date()) {
+  const year = now.getFullYear();
+  const schoolYearStart = now >= dateInYear(year, 8, 1) ? year : year - 1;
+  const anchors = [
+    { date: dateInYear(schoolYearStart, 8, 1), value: 100 },
+    { date: dateInYear(schoolYearStart, 11, 20), value: 33 },
+    { date: dateInYear(schoolYearStart + 1, 0, 2), value: 50 },
+    { date: dateInYear(schoolYearStart + 1, 6, 14), value: 10 },
+    { date: dateInYear(schoolYearStart + 1, 7, 31), value: 100 }
+  ];
+
+  for (let i = 0; i < anchors.length - 1; i++) {
+    const start = anchors[i];
+    const end = anchors[i + 1];
+    if (now >= start.date && now <= end.date) {
+      return interpolateByDate(now, start.date, start.value, end.date, end.value);
+    }
+  }
+
+  return anchors[anchors.length - 1].value;
+}
+
+function updateRpgStats(now = new Date()) {
+  const caffeine = calculateCaffeine(now);
+  const sanity = clamp(calculateSanity(now), 0, 100);
+  const roundedSanity = Math.round(sanity);
+
+  const sanityBar = document.getElementById('sanity-bar');
+  const sanityValue = document.getElementById('sanity-value');
+  const caffeineBar = document.getElementById('caffeine-bar');
+  const caffeineValue = document.getElementById('caffeine-value');
+
+  if (sanityBar) sanityBar.style.width = `${sanity}%`;
+  if (sanityValue) sanityValue.textContent = `${roundedSanity}/100`;
+  if (caffeineBar) caffeineBar.style.width = `${(caffeine / 5) * 100}%`;
+  if (caffeineValue) caffeineValue.textContent = `${caffeine}/5`;
+}
 function enterMode(mode) {
   updateCharacterProgress();
+  updateRpgStats();
   currentMode = mode;
   document.getElementById('mode-overlay').style.display = 'none';
   document.getElementById('app').classList.add('active');
@@ -2638,6 +2703,8 @@ function animateBars() {
 // ── Prevent default on nav links ──────────────────────────────
 updateCharacterProgress();
 setInterval(updateCharacterProgress, 60 * 60 * 1000);
+updateRpgStats();
+setInterval(updateRpgStats, 60 * 1000);
 
 document.querySelectorAll('a[href="#"]').forEach(a => {
   a.addEventListener('click', e => e.preventDefault());
