@@ -1752,8 +1752,30 @@ body.rpg-mode::before {
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  .classic-nav ul { display: none; }
-  .nav-brand { font-size: 0.9rem; }
+  .classic-nav ul {
+    display: flex;
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-top: 1px solid rgba(245,242,236,0.12);
+  }
+  .classic-nav li {
+    flex: 0 0 auto;
+  }
+  .classic-nav li a {
+    height: 42px;
+    line-height: 42px;
+    padding: 0 0.85rem;
+    white-space: nowrap;
+  }
+  .nav-brand {
+    font-size: 0.9rem;
+    max-width: calc(100% - 150px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .nav-lang {
     margin-left: auto;
     flex-wrap: wrap;
