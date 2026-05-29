@@ -1,6 +1,7 @@
 param(
   [string]$IndexPath = (Join-Path $PSScriptRoot '..\index.html'),
-  [string]$ScholarUrl = 'https://scholar.google.fr/citations?user=icHa2g0AAAAJ&hl=fr&oi=ao&pagesize=100'
+  [string]$ScholarUrl = 'https://scholar.google.fr/citations?user=icHa2g0AAAAJ&hl=fr&oi=ao&pagesize=100',
+  [string]$FallbackScholarUrl = 'https://scholar.google.com/citations?user=icHa2g0AAAAJ&hl=en&oi=ao&pagesize=100'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -23,24 +24,62 @@ function Escape-Html {
   return [System.Net.WebUtility]::HtmlEncode($Value)
 }
 
-$resolvedIndexPath = Resolve-Path $IndexPath
-$response = Invoke-WebRequest -Uri $ScholarUrl -UseBasicParsing -Headers @{
-  'User-Agent' = 'Mozilla/5.0'
-}
-$html = $response.Content
+function Get-ScholarHtml {
+  param([string[]]$Urls)
 
-$metricValues = [regex]::Matches($html, '<td class="gsc_rsb_std">(.*?)</td>') |
+  foreach ($url in $Urls) {
+    try {
+      Write-Host "Fetching Google Scholar profile: $url"
+      $response = Invoke-WebRequest -Uri $url -UseBasicParsing -Headers @{
+        'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36'
+        'Accept-Language' = 'en-US,en;q=0.9,fr;q=0.8'
+      }
+
+      if ($response.Content -match 'gsc_rsb_std' -or $response.Content -match 'gsc_a_tr') {
+        return $response.Content
+      }
+
+      Write-Warning "Google Scholar response did not look like a profile page for $url."
+    }
+    catch {
+      Write-Warning "Could not fetch $url. $($_.Exception.Message)"
+    }
+  }
+
+  return $null
+}
+
+function Stop-WithSnapshotWarning {
+  param([string]$Message)
+
+  Write-Warning $Message
+  Write-Warning 'Keeping the existing Scholar snapshot so the workflow does not fail on transient Google Scholar blocking or markup changes.'
+  exit 0
+}
+
+$resolvedIndexPath = Resolve-Path $IndexPath
+$html = Get-ScholarHtml @($ScholarUrl, $FallbackScholarUrl)
+
+if ([string]::IsNullOrWhiteSpace($html)) {
+  Stop-WithSnapshotWarning 'Could not download a usable Google Scholar profile page.'
+}
+
+$regexOptions = [System.Text.RegularExpressions.RegexOptions]::Singleline
+$metricPattern = "<td\b[^>]*class\s*=\s*[""'][^""']*\bgsc_rsb_std\b[^""']*[""'][^>]*>(.*?)</td>"
+$publicationRowPattern = "<tr\b[^>]*class\s*=\s*[""'][^""']*\bgsc_a_tr\b[^""']*[""'][^>]*>.*?</tr>"
+
+$metricValues = [regex]::Matches($html, $metricPattern, $regexOptions) |
   ForEach-Object { Clean-Html $_.Groups[1].Value }
 
 if ($metricValues.Count -lt 3) {
-  throw 'Could not find Google Scholar citation metrics.'
+  Stop-WithSnapshotWarning "Could not find Google Scholar citation metrics. Found $($metricValues.Count) metric cells."
 }
 
 $hIndex = [int]$metricValues[2]
-$publicationRows = [regex]::Matches($html, '<tr class="gsc_a_tr">.*?</tr>')
+$publicationRows = [regex]::Matches($html, $publicationRowPattern, $regexOptions)
 
 if ($publicationRows.Count -eq 0) {
-  throw 'Could not find Google Scholar publication rows.'
+  Stop-WithSnapshotWarning 'Could not find Google Scholar publication rows.'
 }
 
 $cards = foreach ($match in $publicationRows) {
@@ -77,7 +116,8 @@ $spellList = @"
 $($cards -join "`r`n")            </div>
 "@
 
-$indexHtml = [System.IO.File]::ReadAllText($resolvedIndexPath, [System.Text.Encoding]::UTF8)
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+$indexHtml = [System.IO.File]::ReadAllText($resolvedIndexPath, $utf8NoBom)
 
 $indexHtml = [regex]::Replace(
   $indexHtml,
@@ -95,12 +135,12 @@ $indexHtml = [regex]::Replace(
 
 $indexHtml = [regex]::Replace(
   $indexHtml,
-  '(?s)<div class="rpg-spell-list">.*?</div>\s*</section>',
+  '(?sm)^\s*<div class="rpg-spell-list">.*?</div>\s*</section>',
   "$spellList`r`n          </section>",
   1
 )
 
-[System.IO.File]::WriteAllText($resolvedIndexPath, $indexHtml, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText($resolvedIndexPath, $indexHtml, $utf8NoBom)
 
 Write-Host "Updated $resolvedIndexPath"
 Write-Host "PUB: $($publicationRows.Count)"
