@@ -317,6 +317,71 @@ body {
     0 0 0 1px rgba(0,0,0,0.7);
 }
 
+.mode-card.classic .lang-choice {
+  width: 100%;
+}
+
+.mode-card.classic .lang-btn {
+  position: relative;
+  width: 100%;
+  min-height: 44px;
+  color: var(--rpg-text);
+  background:
+    linear-gradient(180deg, #2a1a0a 0%, #120b05 100%) padding-box,
+    linear-gradient(180deg, #f0c86a, #8a5a16 48%, #2a1706 52%, #d4a843) border-box;
+  border: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-rpg-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.09),
+    inset 0 -3px 0 rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,0,0,0.7),
+    0 6px 18px rgba(0,0,0,0.35);
+  text-shadow: 0 1px 0 #000, 0 0 10px rgba(240,200,106,0.45);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+}
+
+.mode-card.classic .lang-btn::before,
+.mode-card.classic .lang-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--rpg-gold);
+  box-shadow: 0 0 8px rgba(240,200,106,0.7);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.mode-card.classic .lang-btn::before { left: 14px; }
+.mode-card.classic .lang-btn::after { right: 14px; }
+
+.mode-card.classic .lang-btn:hover,
+.mode-card.classic .lang-btn.active {
+  color: #fff3c4;
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, #3a260d 0%, #1a1007 100%) padding-box,
+    linear-gradient(180deg, #fff0a8, #c9850a 48%, #3a2108 52%, #f0c86a) border-box;
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.12),
+    inset 0 -3px 0 rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,0,0,0.7),
+    0 0 18px rgba(201,133,10,0.38),
+    0 9px 22px rgba(0,0,0,0.42);
+}
+
+.mode-card.classic .lang-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 3px 5px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(0,0,0,0.7);
+}
+
 /* corner decorations */
 .mode-card .corner {
   position: absolute;
@@ -1737,10 +1802,9 @@ body.rpg-mode::before {
       <div class="card-title">Vanilla Mode</div>
       <div class="card-desc">A classic, professional interface for colleagues and students.</div>
       <div class="lang-choice">
-        <button class="lang-btn active" id="lang-fr-btn" onclick="setLang('fr')">Français</button>
-        <button class="lang-btn" id="lang-en-btn" onclick="setLang('en')">English</button>
+        <button class="lang-btn active" id="lang-fr-btn" onclick="setLang('fr'); enterMode('classic')">Français</button>
+        <button class="lang-btn" id="lang-en-btn" onclick="setLang('en'); enterMode('classic')">English</button>
       </div>
-      <button class="select-btn" onclick="enterMode('classic')">Enter ↗</button>
     </div>
 
     <!-- RPG Mode Card -->
@@ -1781,7 +1845,7 @@ body.rpg-mode::before {
       <div class="nav-lang">
         <button id="c-lang-fr" class="active" onclick="setLang('fr');applyLang()">FR</button>
         <button id="c-lang-en" onclick="setLang('en');applyLang()">EN</button>
-        <button class="switch-mode-btn" onclick="showOverlay()">⚙ RPG Mode</button>
+        <button class="switch-mode-btn" onclick="showOverlay()">◀ EXIT</button>
       </div>
     </nav>
 
@@ -1790,7 +1854,7 @@ body.rpg-mode::before {
       <div class="hero-avatar">
         <!-- Replace src with your actual photo path, e.g. src="images/photo.jpg" -->
         <!-- The 👤 emoji is a fallback if the image is missing -->
-        <img src="images/Portrait.png" alt="Photo de profil"
+        <img src="images/Photo_Pro_Portrait.jpg" alt="Photo de profil"
              onerror="this.style.display='none'; this.parentElement.innerHTML='👤';"
              style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;">
       </div>
@@ -2726,6 +2790,85 @@ function updateRpgStats(now = new Date()) {
   if (caffeineValue) caffeineValue.textContent = `${caffeine}/5`;
 }
 
+function syncClassicPublicationsFromSpellbook() {
+  const classicList = document.querySelector('#c-section-pubs .pub-list');
+  const spellCards = document.querySelectorAll('#r-section-spellbook .rpg-spell-card');
+
+  if (!classicList || spellCards.length === 0) return;
+
+  classicList.replaceChildren(...Array.from(spellCards).map(card => {
+    const title = card.querySelector('.spell-title')?.textContent.trim() || '';
+    const meta = card.querySelector('.spell-meta')?.textContent.trim() || '';
+    const citations = (card.querySelector('.spell-type-badge')?.textContent || '')
+      .replace(/^CITES\s*/i, '')
+      .trim() || '0';
+    const authors = meta.split('·')[0]?.trim() || meta;
+
+    const pubCard = document.createElement('div');
+    pubCard.className = 'pub-card';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'pub-title';
+    titleEl.textContent = title;
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'pub-meta';
+    metaEl.textContent = authors;
+
+    const tagsEl = document.createElement('div');
+    tagsEl.className = 'pub-tags';
+
+    const citeTag = document.createElement('span');
+    citeTag.className = 'pub-tag';
+    citeTag.textContent = `CITES ${citations}`;
+
+    tagsEl.appendChild(citeTag);
+    pubCard.append(titleEl, metaEl, tagsEl);
+    return pubCard;
+  }));
+}
+
+function syncClassicProjectsFromQuests() {
+  const classicGrid = document.querySelector('#c-section-projects .project-grid');
+  const questCards = document.querySelectorAll('#r-section-quests .rpg-quest-card');
+
+  if (!classicGrid || questCards.length === 0) return;
+
+  classicGrid.replaceChildren(...Array.from(questCards).map(card => {
+    const title = card.querySelector('.quest-title')?.textContent.trim() || '';
+    const desc = card.querySelector('.quest-desc')?.textContent.replace(/\s+/g, ' ').trim() || '';
+    const status = card.querySelector('.quest-status')?.textContent.replace(/[▶✓]/g, '').trim() || '';
+    const tags = Array.from(card.querySelectorAll('.quest-tag')).map(tag => tag.textContent.trim()).filter(Boolean);
+
+    const projectCard = document.createElement('div');
+    projectCard.className = 'project-card';
+
+    const iconEl = document.createElement('div');
+    iconEl.className = 'proj-icon';
+    iconEl.textContent = '📜';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'proj-title';
+    titleEl.textContent = title;
+
+    const descEl = document.createElement('div');
+    descEl.className = 'proj-desc';
+    descEl.textContent = tags.length > 0 ? `${desc} ${tags.join(' · ')}` : desc;
+
+    const statusEl = document.createElement('span');
+    statusEl.className = `status-badge ${status.toLowerCase().includes('completed') ? 'ongoing' : 'active'}`;
+    statusEl.textContent = status || 'In progress';
+
+    projectCard.append(iconEl, titleEl, descEl, statusEl);
+    return projectCard;
+  }));
+}
+
+function syncClassicContentFromRpg() {
+  syncClassicPublicationsFromSpellbook();
+  syncClassicProjectsFromQuests();
+}
+
 function arrangeRpgMobileIntro() {
   const mobileIntro = document.getElementById('rpg-mobile-intro');
   const sidepanel = document.querySelector('.rpg-sidepanel');
@@ -2758,6 +2901,7 @@ function enterMode(mode) {
   document.getElementById('app').classList.add('active');
 
   if (mode === 'classic') {
+    syncClassicContentFromRpg();
     document.getElementById('classic-view').style.display = 'block';
     document.getElementById('rpg-view').style.display = 'none';
     document.body.classList.remove('rpg-mode');
@@ -2827,6 +2971,7 @@ updateCharacterProgress();
 setInterval(updateCharacterProgress, 60 * 60 * 1000);
 updateRpgStats();
 setInterval(updateRpgStats, 60 * 1000);
+syncClassicContentFromRpg();
 arrangeRpgMobileIntro();
 window.addEventListener('resize', arrangeRpgMobileIntro);
 
