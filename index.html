@@ -2359,7 +2359,7 @@ body.rpg-mode::before {
                 <div class="rpg-music-player" role="group" aria-label="RPG music player">
                   <div class="rpg-music-title" id="rpg-music-title">No song loaded</div>
                   <div class="rpg-music-controls">
-                    <button class="rpg-music-btn" type="button" id="rpg-music-prev" aria-label="Previous song">◀</button>
+                    <button class="rpg-music-btn" type="button" id="rpg-music-prev" aria-label="Previous song">◀◀</button>
                     <button class="rpg-music-btn" type="button" id="rpg-music-play" aria-label="Play or pause">▶</button>
                     <button class="rpg-music-btn" type="button" id="rpg-music-next" aria-label="Next song">▶▶</button>
                     <button class="rpg-music-btn" type="button" id="rpg-music-mute" aria-label="Mute or unmute">♪</button>
@@ -3013,7 +3013,7 @@ function updateRpgMusicDisplay() {
   const track = rpgMusicTracks[rpgMusicIndex];
   if (els.title) els.title.textContent = track ? track.title : 'No song loaded';
   if (els.play) els.play.textContent = rpgMusicAudio.paused ? '▶' : '❚❚';
-  if (els.mute) els.mute.textContent = rpgMusicAudio.muted ? '♫' : '♪';
+  if (els.mute) els.mute.textContent = rpgMusicAudio.muted ? '𝆔' : '♫';
 }
 
 function loadRpgMusicTrack(index) {
