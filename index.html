@@ -1593,6 +1593,53 @@ body.rpg-mode::before {
   animation: blink 1s step-end infinite;
 }
 
+.rpg-music-player {
+  border: 2px solid var(--rpg-border);
+  background: rgba(30, 22, 10, 0.92);
+  border-radius: 2px;
+  margin-top: 0.75rem;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--rpg-text);
+  box-shadow: inset 0 0 18px rgba(201, 133, 10, 0.08);
+}
+
+.rpg-music-title {
+  min-width: 0;
+  flex: 1;
+  font-family: var(--font-rpg-title);
+  font-size: 0.95rem;
+  color: var(--rpg-gold-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rpg-music-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rpg-music-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--rpg-border);
+  background: var(--rpg-bg2);
+  color: var(--rpg-gold);
+  font-family: var(--font-rpg-title);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.rpg-music-btn:hover {
+  border-color: var(--rpg-border-glow);
+  color: var(--rpg-gold-light);
+}
+
 /* Gear decoration - purely CSS */
 .gear-deco {
   position: fixed;
@@ -1613,6 +1660,16 @@ body.rpg-mode::before {
    RESPONSIVE
 ══════════════════════════════════════════════════════════════ */
 @media (max-width: 700px) {
+  .rpg-music-player {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rpg-music-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   #mode-overlay {
     justify-content: flex-start;
     gap: 1.25rem;
@@ -1822,7 +1879,7 @@ body.rpg-mode::before {
         <img src="images/Photo_Pro_Portrait.jpg" alt="B_Deveautour">
       </div>
       <div class="card-title">Vanilla Mode</div>
-      <div class="card-desc">A classic, professional interface for colleagues and students.</div>
+      <div class="card-desc">Serious and Boring version. Almost nobody judges you for choosing simplicity.</div>
       <div class="lang-choice">
         <button class="lang-btn active" id="lang-fr-btn" onclick="setLang('fr'); enterMode('classic')">Français</button>
         <button class="lang-btn" id="lang-en-btn" onclick="setLang('en'); enterMode('classic')">English</button>
@@ -1837,7 +1894,7 @@ body.rpg-mode::before {
         <img src="images/Portrait.png" alt="Portrait">
       </div>
       <div class="card-title">RPG Mode</div>
-      <div class="card-desc">A steampunk adventure in the world of Science & Knowledge.</div>
+      <div class="card-desc">A fantastic adventure in the world of Science & Knowledge.</div>
       <div class="lang-choice">
         <button class="lang-btn active" style="pointer-events:none;opacity:0.5;">English only</button>
       </div>
@@ -2299,6 +2356,15 @@ body.rpg-mode::before {
                   "The scholar who forges new knowledge from the raw ore of data,
                   wielding equations like a blade and curiosity like a compass."
                 </div>
+                <div class="rpg-music-player" aria-label="RPG music player">
+                  <div class="rpg-music-title" id="rpg-music-title">No song loaded</div>
+                  <div class="rpg-music-controls">
+                    <button class="rpg-music-btn" type="button" id="rpg-music-prev" aria-label="Previous song">◀</button>
+                    <button class="rpg-music-btn" type="button" id="rpg-music-play" aria-label="Play or pause">▶</button>
+                    <button class="rpg-music-btn" type="button" id="rpg-music-next" aria-label="Next song">▶▶</button>
+                    <button class="rpg-music-btn" type="button" id="rpg-music-mute" aria-label="Mute or unmute">♪</button>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -2674,6 +2740,25 @@ body.rpg-mode::before {
 let currentLang = 'fr';
 let currentMode = null;
 
+const rpgMusicTracks = [
+  {
+    title: 'Exploration Chiptune RPG Adventure Theme',
+    src: 'music/nickpanekaiassets-exploration-chiptune-rpg-adventure-theme-336428.mp3'
+  },
+  {
+    title: 'Fantasy RPG Exploration V2',
+    src: 'music/rubyzephyr-fantasy-rpg-exploration-v2-461303.mp3'
+  },
+  {
+    title: 'Melting Excitement',
+    src: 'music/yoshiyuki_tatsuya-melting-excitement-519511.mp3'
+  }
+];
+
+let rpgMusicIndex = 0;
+const rpgMusicAudio = new Audio();
+rpgMusicAudio.preload = 'auto';
+
 // ── Translation strings ───────────────────────────────────────
 const i18n = {
   fr: {
@@ -2914,6 +2999,71 @@ function arrangeRpgMobileIntro() {
     abilitiesAnchor.after(abilities);
   }
 }
+
+function getRpgMusicEls() {
+  return {
+    title: document.getElementById('rpg-music-title'),
+    play: document.getElementById('rpg-music-play'),
+    mute: document.getElementById('rpg-music-mute')
+  };
+}
+
+function updateRpgMusicDisplay() {
+  const els = getRpgMusicEls();
+  const track = rpgMusicTracks[rpgMusicIndex];
+  if (els.title) els.title.textContent = track ? track.title : 'No song loaded';
+  if (els.play) els.play.textContent = rpgMusicAudio.paused ? '▶' : '❚❚';
+  if (els.mute) els.mute.textContent = rpgMusicAudio.muted ? '♫' : '♪';
+}
+
+function loadRpgMusicTrack(index) {
+  if (!rpgMusicTracks.length) return;
+  rpgMusicIndex = (index + rpgMusicTracks.length) % rpgMusicTracks.length;
+  rpgMusicAudio.src = rpgMusicTracks[rpgMusicIndex].src;
+  updateRpgMusicDisplay();
+}
+
+function playRpgMusic() {
+  if (!rpgMusicTracks.length) return;
+  if (!rpgMusicAudio.src) loadRpgMusicTrack(rpgMusicIndex);
+  rpgMusicAudio.play()
+    .then(updateRpgMusicDisplay)
+    .catch(updateRpgMusicDisplay);
+}
+
+function pauseRpgMusic() {
+  rpgMusicAudio.pause();
+  updateRpgMusicDisplay();
+}
+
+function toggleRpgMusicPlayback() {
+  if (rpgMusicAudio.paused) {
+    playRpgMusic();
+  } else {
+    pauseRpgMusic();
+  }
+}
+
+function playAdjacentRpgMusic(direction) {
+  loadRpgMusicTrack(rpgMusicIndex + direction);
+  if (currentMode === 'rpg') playRpgMusic();
+}
+
+function initRpgMusicPlayer() {
+  loadRpgMusicTrack(0);
+  rpgMusicAudio.addEventListener('ended', () => playAdjacentRpgMusic(1));
+  rpgMusicAudio.addEventListener('play', updateRpgMusicDisplay);
+  rpgMusicAudio.addEventListener('pause', updateRpgMusicDisplay);
+  document.getElementById('rpg-music-prev')?.addEventListener('click', () => playAdjacentRpgMusic(-1));
+  document.getElementById('rpg-music-play')?.addEventListener('click', toggleRpgMusicPlayback);
+  document.getElementById('rpg-music-next')?.addEventListener('click', () => playAdjacentRpgMusic(1));
+  document.getElementById('rpg-music-mute')?.addEventListener('click', () => {
+    rpgMusicAudio.muted = !rpgMusicAudio.muted;
+    updateRpgMusicDisplay();
+  });
+  updateRpgMusicDisplay();
+}
+
 function enterMode(mode) {
   updateCharacterProgress();
   updateRpgStats();
@@ -2927,6 +3077,7 @@ function enterMode(mode) {
     document.getElementById('classic-view').style.display = 'block';
     document.getElementById('rpg-view').style.display = 'none';
     document.body.classList.remove('rpg-mode');
+    pauseRpgMusic();
     applyLang();
   } else {
     document.getElementById('classic-view').style.display = 'none';
@@ -2934,13 +3085,16 @@ function enterMode(mode) {
     document.body.classList.add('rpg-mode');
     initSteam();
     animateBars();
+    playRpgMusic();
   }
 }
 
 function showOverlay() {
+  currentMode = null;
   document.getElementById('mode-overlay').style.display = 'flex';
   document.getElementById('app').classList.remove('active');
   document.body.classList.remove('rpg-mode');
+  pauseRpgMusic();
 }
 
 // ── Section navigation ─────────────────────────────────────────
@@ -2995,6 +3149,7 @@ updateRpgStats();
 setInterval(updateRpgStats, 60 * 1000);
 syncClassicContentFromRpg();
 arrangeRpgMobileIntro();
+initRpgMusicPlayer();
 window.addEventListener('resize', arrangeRpgMobileIntro);
 
 document.querySelectorAll('a[href="#"]').forEach(a => {
